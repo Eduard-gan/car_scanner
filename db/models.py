@@ -1,5 +1,5 @@
 from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy import Column, Integer, String, Text, create_engine, DateTime, select, func
+from sqlalchemy import Column, Integer, String, Text, create_engine, DateTime, select, func, Boolean
 from settings import settings
 from datetime import datetime
 from typing import Optional
@@ -34,6 +34,8 @@ class Ad(Base):
 
     description = Column(Text)
     renewed_at = Column(DateTime(timezone=True))
+
+    interesting = Column(Boolean, default=False, server_default='false')
 
     def __str__(self) -> str:
         return f"{self.id}({self.external_id}): {self.title} FOR {self.price} ({self.url})"

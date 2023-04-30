@@ -64,9 +64,13 @@ class PolovniAutomobiliAdInfo(AdInfo):
         try:
             self.safety_block = [x for x in self.info_boxes if 'Sigurnost' in x.text][0]
         except Exception as e:
-            print(f'SOMETHING WENT WRONG WITH SAFETY BLOCK: {repr(e)}')
+            print(f'SOMETHING WENT WRONG WITH SAFETY BLOCK ON {self.url}: {repr(e)}')
 
-        self.options_block = [x for x in self.info_boxes if 'Oprema' in x.text][0]
+        try:
+            self.options_block = [x for x in self.info_boxes if 'Oprema' in x.text][0]
+        except Exception as e:
+            print(f'SOMETHING WENT WRONG WITH "OPTIONS" BLOCK ON {self.url}: {repr(e)}')
+
         self.status_block = [x for x in self.info_boxes if 'Stanje' in x.text][0]
 
         try:
