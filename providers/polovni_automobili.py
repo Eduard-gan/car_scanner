@@ -59,12 +59,14 @@ class PolovniAutomobiliAdInfo(AdInfo):
         try:
             self.safety_block = [x for x in self.info_boxes if 'Sigurnost' in x.text][0]
         except Exception as e:
-            print(f'SOMETHING WENT WRONG WITH SAFETY BLOCK ON {self.url}: {repr(e)}')
+            # print(f'SOMETHING WENT WRONG WITH SAFETY BLOCK ON {self.url}: {repr(e)}')
+            pass
 
         try:
             self.options_block = [x for x in self.info_boxes if 'Oprema' in x.text][0]
         except Exception as e:
-            print(f'SOMETHING WENT WRONG WITH "OPTIONS" BLOCK ON {self.url}: {repr(e)}')
+            # print(f'SOMETHING WENT WRONG WITH "OPTIONS" BLOCK ON {self.url}: {repr(e)}')
+            pass
 
         self.status_block = [x for x in self.info_boxes if 'Stanje' in x.text][0]
 
@@ -157,13 +159,14 @@ class PolovniAutomobili(Provider):
 
         pages_count = 0
         for element in page_elements:
-            print(f"PAGE_ELEMENT: {element.text}")
+            # print(f"PAGE_ELEMENT: {element.text}")
             try:
                 page_number = int(element.text)
                 if page_number > pages_count:
                     pages_count = page_number
             except Exception as e:
-                print(f'{element.text} NOT RECOGNIZED AS PAGE: {repr(e)}')
+                # print(f'{element.text} NOT RECOGNIZED AS PAGE: {repr(e)}')
+                pass
         return pages_count
 
     @classmethod
