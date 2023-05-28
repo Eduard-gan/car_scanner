@@ -4,6 +4,7 @@ from sqlalchemy import text
 from db.models import Session
 from logic import fetch_and_save_to_db
 from providers.polovni_automobili import PolovniAutomobili
+from providers.autosocout24_de import AutoScout24De
 from pathlib import Path
 from alembic import command
 from alembic.config import Config
@@ -42,18 +43,20 @@ def scrap() -> None:
     session.expire_on_commit = False
 
     for model in ('xc90', 'xc60', 'xc70'):
-        print(f"********************************************* {model} ************************************************")
-        new_ads, updates = fetch_and_save_to_db(session=session, provider=PolovniAutomobili(brand='volvo', model=model))
+        for provider in (AutoScout24De(brand='volvo', model=model), PolovniAutomobili(brand='volvo', model=model)):
+            print(f"********************************************* {model} ************************************************")
+            new_ads, updates = fetch_and_save_to_db(session=session, provider=provider)
 
-        if new_ads:
-            print("NEW ADS:")
-            for ad in new_ads:
-                print(ad)
+            if new_ads:
+                print("NEW ADS:")
+                for ad in new_ads:
+                    print(ad)
 
-        if updates:
-            print("UPDATED ADS:")
-            for event in updates:
-                print(event.get_description(session))
+            if updates:
+                print("UPDATED ADS:")
+                for event in updates:
+                    print(event.get_description(session))
+
 
 @app.command()
 def get(query: str) -> None:

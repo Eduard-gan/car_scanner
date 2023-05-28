@@ -1,17 +1,12 @@
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import as_completed
 from datetime import datetime
 from typing import Optional
 
 import requests
 from bs4 import BeautifulSoup, Tag, ResultSet
 
-from db.models import Ad
-from . import Provider, AdInfo
-from concurrent.futures import ThreadPoolExecutor
-from concurrent.futures import as_completed
-
-
-class IncompleteData(Exception):
-    """Данных недостаточно, чтобы предоставить базовый набор данных об объявлении."""
+from . import Provider, AdInfo, IncompleteData
 
 
 class Page:

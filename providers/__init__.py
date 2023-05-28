@@ -1,5 +1,11 @@
 from datetime import datetime
+
 from db.models import Ad
+
+
+class IncompleteData(Exception):
+    """Данных недостаточно, чтобы предоставить базовый набор данных об объявлении."""
+
 
 class AdInfo:
 
