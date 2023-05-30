@@ -81,7 +81,7 @@ class AutoScout24De(Provider):
 
     def get_ad_list_url(self, page_number: int) -> str:
         url = f"""
-        https://www.autoscout24.de/_next/data/as24-search-funnel_main-3916/lst
+        https://www.autoscout24.de/_next/data/as24-search-funnel_main-3918/lst
         /{self.brand}/{self.model}/tr_automatik.json?
         atype=C
         &cy=D%2CA%2CB%2CE%2CF%2CI%2CL%2CNL
@@ -103,8 +103,8 @@ class AutoScout24De(Provider):
         return url.replace(' ', '').replace('\n', '')
 
     @staticmethod
-    def parse_pages_count(page_contents: bytes) -> int:
-        return json.loads(page_contents.decode())['pageProps']['numberOfPages']
+    def parse_pages_count(page_contents: str) -> int:
+        return json.loads(page_contents)['pageProps']['numberOfPages']
 
     @classmethod
     def parse_ads_data(cls, page_contents: str) -> dict:
@@ -117,11 +117,12 @@ class AutoScout24De(Provider):
         page_number = 1
         while page_number:
             url = cls.get_ad_list_url(page_number)
-            page = requests.get(url=url)
+            response = requests.get(url=url)
+            assert response.status_code == 200, f'Response status is {response.status_code} instead of 200'
 
-            ads_data.extend(cls.parse_ads_data(page.content.decode()))
+            ads_data.extend(cls.parse_ads_data(response.content.decode()))
 
-            pages_count = cls.parse_pages_count(page.content)
+            pages_count = cls.parse_pages_count(response.content.decode())
             sleep(5)
 
             if pages_count > page_number:
