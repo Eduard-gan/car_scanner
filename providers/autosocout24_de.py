@@ -81,7 +81,7 @@ class AutoScout24De(Provider):
 
     def get_ad_list_url(self, page_number: int) -> str:
         url = f"""
-        https://www.autoscout24.de/_next/data/as24-search-funnel_main-3918/lst
+        https://www.autoscout24.de/_next/data/as24-search-funnel_main-3921/lst
         /{self.brand}/{self.model}/tr_automatik.json?
         atype=C
         &cy=D%2CA%2CB%2CE%2CF%2CI%2CL%2CNL
