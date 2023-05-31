@@ -131,7 +131,7 @@ class PolovniAutomobili(Provider):
         self.model = model
 
     def get_ad_list_url(self, page_number: int) -> str:
-        return f'https://www.polovniautomobili.com/auto-oglasi/pretraga?page={page_number}&brand={self.brand}&model[0]={self.model}'
+        return f'https://www.polovniautomobili.com/auto-oglasi/pretraga?page={page_number}&brand={self.brand}&model[0]={self.model}&price_to=10000'
 
     @staticmethod
     def fetch_page(page: Page) -> Page:

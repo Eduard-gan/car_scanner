@@ -79,9 +79,9 @@ class AutoScout24De(Provider):
         self.brand = brand
         self.model = model
 
-    def get_ad_list_url(self, page_number: int) -> str:
+    def get_ad_list_url(self, page_number: int, funnel_number: int) -> str:
         url = f"""
-        https://www.autoscout24.de/_next/data/as24-search-funnel_main-3921/lst
+        https://www.autoscout24.de/_next/data/as24-search-funnel_main-{funnel_number}/lst
         /{self.brand}/{self.model}/tr_automatik.json?
         atype=C
         &cy=D%2CA%2CB%2CE%2CF%2CI%2CL%2CNL
@@ -111,12 +111,30 @@ class AutoScout24De(Provider):
         data = json.loads(page_contents)
         return data['pageProps']['listings']
 
+    @staticmethod
+    def detect_funnel_number() -> int:
+        with open("providers/autoscout24_de_funnel.json", "r") as f:
+            current_number = int(f.read())
+
+        while True:
+            url = f"https://www.autoscout24.de/_next/data/" \
+                  f"as24-search-funnel_main-{current_number}/lst/volvo/xc90/tr_automatik.json"
+            response = requests.get(url)
+            if response.status_code == 200:
+                with open("providers/autoscout24_de_funnel.json", "w") as f:
+                    f.write(str(current_number))
+                return current_number
+            else:
+                current_number += 1
+
     def get_ads_jsons_paginated(cls) -> list[dict]:
         ads_data = []
 
+        funnel_number = cls.detect_funnel_number()
+
         page_number = 1
         while page_number:
-            url = cls.get_ad_list_url(page_number)
+            url = cls.get_ad_list_url(page_number=page_number, funnel_number=funnel_number)
             response = requests.get(url=url)
             assert response.status_code == 200, f'Response status is {response.status_code} instead of 200'
 
